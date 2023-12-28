@@ -31,7 +31,7 @@ jobs:
         pip install \
           pytest \
           tox \
-          errbot \
+          git+https://github.com/gdelaney/errbot.git@master \
           coverage
         errbot --init
         cp tests/config-ci.py config.py
