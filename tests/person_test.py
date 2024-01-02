@@ -226,6 +226,30 @@ class SlackPersonTests(unittest.TestCase):
         """
     )
 
+    BOT_INFO_OK = json.loads(
+        """
+        {
+            "ok": "true",
+            "bot": {
+                "id": "B012A3CDE",
+                "name": "My bot name",
+                "deleted": "false",
+                "updated": "1449272004",
+                "app_id": "A123456",
+                "user_id": "U123456",
+                "icons": {
+                    "image_34": "https://...",
+                    "image_44": "https://...",
+                    "image_68": "https://...",
+                    "image_88": "https://...",
+                    "image_102": "https://...",
+                    "image_132": "https://..."
+                }
+            }
+        }
+        """
+    )
+
     def setUp(self):
         self.webclient = MagicMock()
         self.webclient.users_info.return_value = SlackPersonTests.USER_INFO_OK
@@ -307,6 +331,12 @@ class SlackPersonTests(unittest.TestCase):
         self.webclient.team_info.return_value = SlackPersonTests.TEAM_INFO_OK
         self.p = SlackPerson(self.webclient, userid="W012A3CDE")
         self.assertEqual(self.p.domain, "example")
+
+    def test_bot_org_level(self):
+        self.webclient = MagicMock()
+        self.webclient.bots_info.return_value = SlackPersonTests.BOT_INFO_OK
+        self.p = SlackPerson(self.webclient, userid="B012A3CDE", team_id="T1234567890")
+        self.webclient.bots_info.assert_called_once_with(bot='B012A3CDE', team_id='T1234567890')
 
     def test_aclattr(self):
         self.assertEqual(self.p.aclattr, "W012A3CDE")
