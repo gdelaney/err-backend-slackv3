@@ -312,10 +312,10 @@ class SlackBot(SlackPerson):
     This class describes a bot on Slack's network.
     """
 
-    def __init__(self, webclient: WebClient, bot_id, bot_username):
+    def __init__(self, webclient: WebClient, bot_id, bot_username, team_id=None):
         self._bot_id = bot_id
         self._bot_username = bot_username
-        super().__init__(webclient, userid=bot_id)
+        super().__init__(webclient, userid=bot_id, team_id=team_id)
 
     @property
     def username(self):
@@ -340,8 +340,8 @@ class SlackRoomBot(RoomOccupant, SlackBot):
     This class represents a bot inside a MUC.
     """
 
-    def __init__(self, webclient, bot_id, bot_username, channelid, bot):
-        super().__init__(webclient, bot_id, bot_username)
+    def __init__(self, webclient, bot_id, bot_username, channelid, bot, team_id=None):
+        super().__init__(webclient, bot_id, bot_username, team_id=team_id)
         self._room = SlackRoom(webclient=webclient, channelid=channelid, bot=bot)
 
     @property

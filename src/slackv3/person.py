@@ -27,7 +27,7 @@ class SlackPerson(Person):
         }
     """
 
-    def __init__(self, webclient: WebClient, userid=None, channelid=None):
+    def __init__(self, webclient: WebClient, userid=None, channelid=None, team_id=None):
         if userid is not None and userid[0] not in ("U", "W", "B"):
             raise Exception(
                 f"This is not a Slack user or bot id: {userid} " "(should start with B, U or W)"
@@ -39,6 +39,7 @@ class SlackPerson(Person):
             )
 
         self._userid = userid
+        self._team_id = team_id
         self._user_info = {}
         self._channelid = channelid
         self._channel_info = {}
@@ -88,7 +89,7 @@ class SlackPerson(Person):
             return
 
         if self._userid[0] == "B":
-            res = self._webclient.bots_info(bot=self._userid)
+            res = self._webclient.bots_info(bot=self._userid, team_id=self._team_id)
         else:
             res = self._webclient.users_info(user=self._userid)
 

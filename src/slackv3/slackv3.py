@@ -357,10 +357,11 @@ class SlackBackend(ErrBot):
         try:
             event = event_data["event"]
             event_type = event["type"]
+            team_id = event_data.get("team_id")
 
             try:
                 event_handler = getattr(self, f"_handle_{event_type}")
-                return event_handler(self.slack_web, event)
+                return event_handler(self.slack_web, event, team_id)
             except AttributeError:
                 log.debug(f"Event type {event_type} not supported.")
         except KeyError:
@@ -464,7 +465,7 @@ class SlackBackend(ErrBot):
 
         self.callback_reaction(reaction)
 
-    def _handle_message(self, webclient: WebClient, event):
+    def _handle_message(self, webclient: WebClient, event, team_id=None):
         """Event handler for the 'message' event"""
         channel = event["channel"]
         if channel[0] not in "CGD":
@@ -519,6 +520,7 @@ class SlackBackend(ErrBot):
                     webclient,
                     bot_id=event.get("bot_id"),
                     bot_username=event.get("username", ""),
+                    team_id=team_id
                 )
                 msg.to = SlackPerson(webclient, user, channel)
             else:
@@ -540,6 +542,7 @@ class SlackBackend(ErrBot):
                     bot_username=event.get("username", ""),
                     channelid=channel,
                     bot=self,
+                    team_id=team_id
                 )
                 msg.to = SlackRoom(webclient=webclient, channelid=channel, bot=self)
             else:
