@@ -336,7 +336,7 @@ class SlackPersonTests(unittest.TestCase):
         self.webclient = MagicMock()
         self.webclient.bots_info.return_value = SlackPersonTests.BOT_INFO_OK
         self.p = SlackPerson(self.webclient, userid="B012A3CDE", team_id="T1234567890")
-        self.webclient.bots_info.assert_called_once_with(bot='B012A3CDE', team_id='T1234567890')
+        self.webclient.bots_info.assert_called_once_with(bot="B012A3CDE", team_id="T1234567890")
 
     def test_aclattr(self):
         self.assertEqual(self.p.aclattr, "W012A3CDE")
