@@ -520,7 +520,7 @@ class SlackBackend(ErrBot):
                     webclient,
                     bot_id=event.get("bot_id"),
                     bot_username=event.get("username", ""),
-                    team_id=team_id
+                    team_id=team_id,
                 )
                 msg.to = SlackPerson(webclient, user, channel)
             else:
@@ -542,7 +542,7 @@ class SlackBackend(ErrBot):
                     bot_username=event.get("username", ""),
                     channelid=channel,
                     bot=self,
-                    team_id=team_id
+                    team_id=team_id,
                 )
                 msg.to = SlackRoom(webclient=webclient, channelid=channel, bot=self)
             else:
